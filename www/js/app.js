@@ -7,6 +7,10 @@ define(function(require) {
     // and a lot smaller):
     // http://zeptojs.com/
     var $ = require('zepto');
+    var bookWidth = 116;
+    var bookMargen = 10;
+    var addBookButton = $(".icon-add").parent();
+    var booksSize = $(".books a").length;
 
     // Need to verify receipts? This library is included by default.
     // https://github.com/mozilla/receiptverifier
@@ -18,13 +22,30 @@ define(function(require) {
     require('./install-button');
 
     // Write your app here.
+    var initBookList = function(){        
+        $(".books").css("width",(booksSize*bookWidth+bookMargen));
+    };
 
+    var appendBook = function(book){
+        var blob = book.blob;
+        booksSize++;
+        initBookList();
+        $(".books").prepend('<a href="#"><img src="'+window.URL.createObjectURL(blob)+'"/></a>');
+    };
 
+    initBookList();
 
-
-
-
-
+    addBookButton.click(function(event){
+        var pickImg = new MozActivity({
+            name: "pick",
+            data: {
+                
+            }
+        });
+        pickImg.onsuccess = function () { 
+            appendBook(this.result);
+        };
+    });
 
 });
 
